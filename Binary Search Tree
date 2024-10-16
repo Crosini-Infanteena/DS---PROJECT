@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Binary Search Tree Node
+struct TreeNode {
+    int data;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+// Function to create a new tree node
+struct TreeNode *createNode(int value) {
+    struct TreeNode *newNode = (struct TreeNode *)malloc(sizeof(struct TreeNode));
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a new node into BST
+struct TreeNode *insertNode(struct TreeNode *root, int value) {
+    if (root == NULL) {
+        return createNode(value);
+    }
+
+    if (value < root->data) {
+        root->left = insertNode(root->left, value);
+    } else if (value > root->data) {
+        root->right = insertNode(root->right, value);
+    }
+
+    return root;
+}
+
+// Function to print spaces
+void printSpaces(int n) {
+    for (int i = 0; i < n; i++) {
+        printf(" ");
+    }
+}
+
+// Function to print binary tree using inorder traversal
+void printTree(struct TreeNode *root, int space) {
+    if (root == NULL) return;
+
+    space += 5;
+
+    printTree(root->right, space);
+
+    printf("\n");
+    printSpaces(space);
+    printf("%d\n", root->data);
+
+    printTree(root->left, space);
+}
+int main() {
+    struct TreeNode *root = NULL;
+    int num_nodes, value;
+
+    printf("Welcome to Binary Search Tree Builder\n\n");
+
+    // Getting the number of nodes from the user
+    printf("Enter the number of nodes to insert: ");
+    scanf("%d", &num_nodes);
+
+    // Inserting nodes into the BST
+    printf("Enter %d node value(s):\n", num_nodes);
+    for (int i = 0; i < num_nodes; i++) {
+        scanf("%d", &value);
+        root = insertNode(root, value);
+    }
+
+    printf("\nBinary Search Tree Created and Printed Successfully\n");
+
+    // Printing the binary search tree
+    printf("\nBinary Search Tree:\n");
+    printTree(root, 0);
+
+    // Freeing dynamically allocated memory
+    // (Not necessary for short-lived programs, but good practice)
+    // freeTree(root);
+
+    return 0;
+}
